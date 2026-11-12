@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - EduScience</title>
+    <link rel="stylesheet" href="../pages/style.css">
+</head>
+<body>
+    <header>
+        <h1>EduScience</h1>
+        <p>Entre na sua conta</p>
+    </header>
+
+    <main>
+        <h2>Login</h2>
+
+        <form id="login">
+            <input id="email" type="email" placeholder="E-mail" required>
+            <input id="senha" type="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+    </main>
+
+    <script>
+        document.getElementById("login").onsubmit = async (evento) => {
+            evento.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+
+            try {
+                const resposta = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await resposta.json();
+                alert(dados.mensagem || dados.erro);
+
+                if (resposta.ok && dados.token) {
+                    sessionStorage.setItem("token", dados.token);
+                    window.location.href = "../pages/index.html";
+                } else if (resposta.ok) {
+                    alert("O servidor não enviou o token de login.");
+                }
+            } catch (erro) {
+                alert("Erro ao conectar com o servidor.");
+            }
+        };
+    </script>
+</body>
+</html>

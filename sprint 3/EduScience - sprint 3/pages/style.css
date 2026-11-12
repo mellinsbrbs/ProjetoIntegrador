@@ -1,0 +1,249 @@
+
+:root {
+    --rosa-claro: #F8C8DC;
+    --rosa-escuro: #8F2050;
+    --rosa-fundo: #FFF5F9;
+    --branco: #FFFFFF;
+    --texto: #38252E;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--rosa-fundo);
+    color: var(--texto);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* CABEÇALHO */
+
+header {
+    background: linear-gradient(135deg, #F8C8DC, #EFA8C5);
+    color: var(--rosa-escuro);
+    text-align: center;
+    padding: 45px 20px;
+    border-bottom: 4px solid var(--rosa-escuro);
+}
+
+header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: 1px;
+}
+
+header p {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 8px 0 20px;
+}
+
+/* LINKS DO MENU */
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 15px 0;
+}
+
+header a {
+    display: inline-block;
+    background: var(--rosa-escuro);
+    color: var(--branco);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 20px;
+    margin: 4px;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+header a:hover {
+    background: #6D153A;
+    transform: translateY(-3px);
+}
+
+/* CONTEÚDO */
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 45px 20px;
+    text-align: center;
+}
+
+main h2 {
+    color: var(--rosa-escuro);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+/* LISTA DE PRODUTOS */
+
+#lista-produtos,
+#itens-carrinho {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+}
+
+/* CARDS */
+
+.produto {
+    background: var(--branco);
+    width: 240px;
+    padding: 25px 20px;
+    border: 2px solid var(--rosa-claro);
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(143, 32, 80, 0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.produto:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(143, 32, 80, 0.20);
+}
+
+.produto h3 {
+    color: var(--rosa-escuro);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-top: 0;
+}
+
+.produto p {
+    color: var(--texto);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* BOTÕES */
+
+button {
+    background: var(--rosa-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin: 5px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button:hover:not(:disabled) {
+    background: #6D153A;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background: #D7BBC6;
+    color: #523A45;
+    cursor: not-allowed;
+}
+
+/* FORMULÁRIOS */
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+input {
+    width: 100%;
+    padding: 13px 15px;
+    border: 2px solid var(--rosa-claro);
+    border-radius: 10px;
+    background: var(--branco);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: 2px solid var(--rosa-escuro);
+    outline-offset: 2px;
+}
+
+main a {
+    color: var(--rosa-escuro);
+    font-weight: 600;
+}
+
+/* CARRINHO */
+
+#total {
+    color: var(--rosa-escuro);
+    font-size: 25px;
+    font-weight: 700;
+    margin-top: 30px;
+}
+
+#botao-finalizar {
+    padding: 15px 30px;
+    font-size: 17px;
+}
+
+/* RODAPÉ */
+
+footer {
+    background: var(--rosa-escuro);
+    color: var(--branco);
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 15px;
+}
+
+/* CELULARES */
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 32px;
+    }
+
+    header p {
+        font-size: 16px;
+    }
+
+    main {
+        padding: 30px 15px;
+    }
+
+    main h2 {
+        font-size: 25px;
+    }
+
+    .produto {
+        width: 100%;
+        max-width: 360px;
+    }
+}
+
+.foto-produto {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #F8C8DC;
+}

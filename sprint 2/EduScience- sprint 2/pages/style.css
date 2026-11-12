@@ -1,0 +1,49 @@
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f0f5fa;
+    color: #222;
+}
+
+header {
+    background: #19558a;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+main {
+    padding: 30px;
+    text-align: center;
+}
+
+#lista-produtos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.produto {
+    background: white;
+    padding: 20px;
+    width: 220px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+button {
+    background: #19558a;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+footer {
+    background: #19558a;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}

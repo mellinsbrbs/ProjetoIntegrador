@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Carrinho - EduScience</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>EduScience</h1>
+        <p>Meu carrinho de compras</p>
+        <a href="index.html">Voltar para a loja</a>
+    </header>
+
+    <main>
+        <h2>Produtos no carrinho</h2>
+
+        <div id="itens-carrinho"></div>
+
+        <h3 id="total">Total: R$ 0,00</h3>
+
+        <button id="botao-finalizar" onclick="finalizarCompra()" disabled>
+            Finalizar Compra
+        </button>
+    </main>
+
+    <script>
+        const API = "http://localhost:3000";
+
+        function buscarToken() {
+            return sessionStorage.getItem("token");
+        }
+
+        async function carregarCarrinho() {
+            const lista = document.getElementById("itens-carrinho");
+            const total = document.getElementById("total");
+            const botao = document.getElementById("botao-finalizar");
+
+            botao.disabled = true;
+            total.textContent = "Total: R$ 0,00";
+
+            if (!buscarToken()) {
+                lista.textContent = "Faça login para ver seu carrinho.";
+                return;
+            }
+
+            try {
+                const resposta = await fetch(`${API}/carrinho`, {
+                    headers: {
+                        "Authorization": `Bearer ${buscarToken()}`
+                    }
+                });
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    lista.textContent = dados.erro || "Erro ao carregar.";
+                    return;
+                }
+
+                lista.innerHTML = "";
+
+                if (dados.itens.length === 0) {
+                    lista.textContent = "Seu carrinho está vazio.";
+                    return;
+                }
+
+                dados.itens.forEach(item => {
+                    const div = document.createElement("div");
+                    div.className = "produto";
+
+                    const nome = document.createElement("h3");
+                    nome.textContent = item.nome;
+
+                    const preco = document.createElement("p");
+                    preco.textContent =
+                        `Preço: R$ ${Number(item.preco).toFixed(2)}`;
+
+                    const quantidade = document.createElement("p");
+                    quantidade.textContent =
+                        `Quantidade: ${item.quantidade}`;
+
+                    const aumentar = document.createElement("button");
+                    aumentar.textContent = "+";
+                    aumentar.onclick = () => alterarQuantidade(
+                        item.id_item, item.quantidade + 1
+                    );
+
+                    const diminuir = document.createElement("button");
+                    diminuir.textContent = "-";
+                    diminuir.disabled = item.quantidade <= 1;
+                    diminuir.onclick = () => alterarQuantidade(
+                        item.id_item, item.quantidade - 1
+                    );
+
+                    const remover = document.createElement("button");
+                    remover.textContent = "Remover";
+                    remover.onclick = () => removerProduto(item.id_item);
+
+                    div.append(
+                        nome,
+                        preco,
+                        quantidade,
+                        diminuir,
+                        aumentar,
+                        remover
+                    );
+
+                    lista.appendChild(div);
+                });
+
+                total.textContent =
+                    `Total: R$ ${Number(dados.total).toFixed(2).replace(".", ",")}`;
+
+                botao.disabled = false;
+
+            } catch (erro) {
+                lista.textContent = "Erro ao conectar ao servidor.";
+            }
+        }
+
+        async function alterarQuantidade(id, quantidade) {
+            try {
+                const resposta = await fetch(`${API}/carrinho/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${buscarToken()}`
+                    },
+                    body: JSON.stringify({ quantidade })
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    await carregarCarrinho();
+                } else {
+                    alert(dados.erro);
+                }
+
+            } catch (erro) {
+                alert("Erro ao atualizar quantidade.");
+            }
+        }
+
+        async function removerProduto(id) {
+            try {
+                const resposta = await fetch(`${API}/carrinho/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${buscarToken()}`
+                    }
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    await carregarCarrinho();
+                } else {
+                    alert(dados.erro);
+                }
+
+            } catch (erro) {
+                alert("Erro ao remover produto.");
+            }
+        }
+
+        async function finalizarCompra() {
+            const botao = document.getElementById("botao-finalizar");
+
+            if (!buscarToken()) {
+                alert("Faça login primeiro!");
+                return;
+            }
+
+            const confirmar = confirm(
+                "Deseja finalizar seu pedido?"
+            );
+
+            if (!confirmar) {
+                return;
+            }
+
+            botao.disabled = true;
+
+            try {
+                const resposta = await fetch(`${API}/finalizar-compra`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${buscarToken()}`
+                    }
+                });
+
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    alert(
+                        `Pedido registrado com sucesso!\n` +
+                        `Número do pedido: ${dados.id_venda}\n` +
+                        `Total: R$ ${Number(dados.total).toFixed(2).replace(".", ",")}`
+                    );
+
+                    await carregarCarrinho();
+                } else {
+                    alert(dados.erro || "Erro ao finalizar o pedido.");
+                    await carregarCarrinho();
+                }
+
+            } catch (erro) {
+                alert("Não foi possível conectar ao servidor.");
+                await carregarCarrinho();
+            }
+        }
+
+        carregarCarrinho();
+    </script>
+</body>
+</html>
